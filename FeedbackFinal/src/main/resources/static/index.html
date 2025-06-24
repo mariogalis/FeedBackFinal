@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback Final</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; }
+        h1 { color: #2c3e50; }
+        .module { margin-bottom: 2rem; }
+        label { display: block; margin-top: 0.5rem; }
+        input { padding: 0.3rem; margin-top: 0.2rem; width: 200px; }
+        button { margin-top: 1rem; padding: 0.4rem 1rem; }
+        a { display: inline-block; margin: 0.3rem 0; color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<h1>Panel de Pruebas - Feedback Final</h1>
+
+<div class="module">
+    <h2>🛒 Módulo Order</h2>
+    <a href="/orders" target="_blank">📄 Ver todos los pedidos</a>
+
+    <div style="margin-top:1rem;">
+        <strong>➕ Crear pedido de prueba:</strong>
+        <label for="desc">Descripción:</label>
+        <input type="text" id="desc" placeholder="Ej: Pedido urgente">
+        <label for="amount">Cantidad:</label>
+        <input type="number" id="amount" placeholder="Ej: 99.99" step="0.01">
+        <button onclick="crearPedido()">Enviar pedido</button>
+        <p id="resultado"></p>
+    </div>
+</div>
+
+<div class="module">
+    <h2>🧠 Módulo Stark Industries</h2>
+
+    <label for="numTareas">Número de tareas a lanzar:</label>
+    <input type="number" id="numTareas" min="1" value="5" style="width: 80px;">
+
+    <button onclick="redirigirTareas()">📊 Lanzar tareas</button>
+</div>
+
+<script>
+    function redirigirTareas() {
+        const num = parseInt(document.getElementById('numTareas').value);
+        if (isNaN(num) || num <= 0) {
+            alert("Introduce un número válido de tareas.");
+            return;
+        }
+        // Abre la URL en una nueva pestaña
+        window.open(`/stark/analyze?tareas=${num}`, '_blank');
+    }
+</script>
+
+
+<div class="module">
+    <h2>🦖 Módulo Jurassic Park (WebFlux)</h2>
+    <a href="/jurassic/stream" target="_blank">📡 Ver sensores en tiempo real</a>
+</div>
+
+<div class="module">
+    <h2>🪄 Módulo Mundo Mágico (Microservicios)</h2>
+    <a href="/magic/gateway/status" target="_blank">🧪 Probar Gateway/API Status</a><br>
+    <a href="/magic/service-a/test" target="_blank">🔌 Test Servicio A</a>
+</div>
+
+<div class="module">
+    <h2>🚀 Módulo Marte (Spring Batch)</h2>
+    <a href="/mars/launch" target="_blank">▶️ Lanzar procesamiento batch</a><br>
+</div>
+
+<footer style="margin-top: 2rem; font-size: 0.9rem; color: #888;">
+    Feedback Final - Mario Gonzalez Galisteo
+</footer>
+
+<script>
+    function crearPedido() {
+        const desc = document.getElementById('desc').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+
+        if (!desc || isNaN(amount)) {
+            alert("Por favor, introduce una descripción y una cantidad válida.");
+            return;
+        }
+
+        fetch('/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ description: desc, amount: amount })
+        })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('resultado').textContent = "✅ Pedido creado con ID: " + data.id;
+            })
+            .catch(error => {
+                document.getElementById('resultado').textContent = "❌ Error al crear el pedido: " + error;
+            });
+    }
+</script>
+
+</body>
+</html>
